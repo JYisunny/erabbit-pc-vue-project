@@ -1,14 +1,12 @@
 <template>
-  <!-- 一级路由根组件 -->
-  <RouterView />
+  <div class="container">HomePage</div>
 </template>
 
 <script>
 export default {
-
+  name: 'HomePage'
 }
 </script>
 
 <style>
-
 </style>
