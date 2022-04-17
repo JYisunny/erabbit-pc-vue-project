@@ -1,9 +1,9 @@
 <template>
   <ul class="app-header-nav">
     <li class="home"><RouterLink to="/">首页</RouterLink></li>
-    <li v-for="item in list" :key="item.id" @mouseenter="show(item)" @mouseleave="hide(item)">
+    <li v-for="item in list" :key="item.id" @mousemove="show(item)" @mouseleave="hide(item)">
       <RouterLink @click="hide(item)" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
-      <div class="layer" :class="{open: item.open}">
+      <div class="layer" :class="{open:item.open}">
         <ul>
           <li v-for="sub in item.children" :key="sub.id">
             <RouterLink @click="hide(item)" :to="`/category/sub/${sub.id}`">
@@ -53,6 +53,7 @@ export default {
   justify-content: space-around;
   padding-left: 40px;
   position: relative;
+  z-index: 999;
   > li {
     margin-right: 40px;
     width: 38px;

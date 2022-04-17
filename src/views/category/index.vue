@@ -5,7 +5,9 @@
       <XtxBread>
         <!-- <XtxBreadItem :to="{path: '/'}">首页</XtxBreadItem> -->
         <XtxBreadItem to="/">首页</XtxBreadItem>
-        <XtxBreadItem>{{topCategory.name}}</XtxBreadItem>
+        <Transition name="fade-right" mode="in-out">
+          <XtxBreadItem :key="topCategory.id">{{topCategory.name}}</XtxBreadItem>
+        </Transition>
       </XtxBread>
       <!-- 轮播图 -->
       <XtxCarousel :sliders="sliders" style="height: 500px" />
@@ -24,14 +26,14 @@
         </ul>
       </div>
       <!-- 各个不同分类推荐商品 -->
-      <div class="ref-goods">
+      <div class="ref-goods" v-for="sub in subList" :key="sub.id">
         <div class="head">
-          <h3>- 海鲜 -</h3>
+          <h3>- {{sub.name}} -</h3>
           <p class="tag">温暖柔软，品质之选</p>
-          <XtxMore />
+          <XtxMore :path="`/category/sub/${sub.id}`" />
         </div>
         <div class="body">
-          <GoodsItem v-for="i in 5" :key="i" />
+          <GoodsItem v-for="goods in sub.goods" :key="goods.id" :goods="goods" />
         </div>
       </div>
     </div>
@@ -40,10 +42,11 @@
 
 <script>
 import { findBanner } from '@/api/home'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import GoodsItem from './components/goods-item'
+import { findTopCategory } from '@/api/category'
 
 export default {
   name: 'TopCategory',
@@ -69,7 +72,19 @@ export default {
       return cate
     })
 
-    return { sliders, topCategory }
+    // 获取各个子类目下推荐商品
+    const subList = ref([])
+    const getSublist = () => {
+      findTopCategory(route.params.id).then(data => {
+        subList.value = data.result.children
+      })
+    }
+    watch(() => route.params.id, (newVal) => {
+      // newVal && getSublist()  // 加一个严谨判断 在顶级类目才会发请求
+      if (newVal && `/category/${newVal}` === route.path) getSublist()
+    }, { immediate: true })
+
+    return { sliders, topCategory, subList }
   }
 }
 </script>
