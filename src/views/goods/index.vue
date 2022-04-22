@@ -12,8 +12,11 @@
       <div class="goods-info">
         <div class="media">
           <GoodsImage :images="goods.mainPictures" />
+          <GoodsSales />
         </div>
-        <div class="spec"></div>
+        <div class="spec">
+          <GoodName :goods="goods" />
+        </div>
       </div>
       <!-- 商品推荐 -->
       <GoodsRelevant />
@@ -36,12 +39,14 @@
 import { nextTick, ref, watch } from 'vue'
 import GoodsRelevant from './components/goods-relevant'
 import GoodsImage from './components/goods-image'
+import GoodsSales from './components/goods-sales'
+import GoodName from './components/goods-name'
 import { findGoods } from '@/api/product'
 import { useRoute } from 'vue-router'
 
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant, GoodsImage },
+  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodName },
   setup () {
     // 1. 获取商品详情, 进行渲染
     const goods = useGoods()
