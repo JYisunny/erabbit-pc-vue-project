@@ -16,6 +16,10 @@
         </div>
         <div class="spec">
           <GoodName :goods="goods" />
+          <!-- sku组件 -->
+          <GoodsSku :goods="goods" skuId="300270668" @change="changeSku" />
+          <!-- 数量选择组件 -->
+          <XtxNumbox label="数量" v-model="num" :max="goods.inventory" />
         </div>
       </div>
       <!-- 商品推荐 -->
@@ -41,16 +45,28 @@ import GoodsRelevant from './components/goods-relevant'
 import GoodsImage from './components/goods-image'
 import GoodsSales from './components/goods-sales'
 import GoodName from './components/goods-name'
+import GoodsSku from './components/goods-sku'
 import { findGoods } from '@/api/product'
 import { useRoute } from 'vue-router'
 
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodName },
+  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodName, GoodsSku },
   setup () {
     // 1. 获取商品详情, 进行渲染
     const goods = useGoods()
-    return { goods }
+    const changeSku = (sku) => {
+      // 修改商品的现在原价库存信息
+      if (sku.skuId) {
+        goods.value.price = sku.price
+        goods.value.oldPrice = sku.oldPrice
+        goods.value.inventory = sku.inventory
+      }
+    }
+
+    // 选择的数量
+    const count = ref(1)
+    return { goods, changeSku, count }
   }
 }
 // 获取商品详情
