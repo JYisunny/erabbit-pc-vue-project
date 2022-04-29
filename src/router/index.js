@@ -12,6 +12,8 @@ const Goods = () =>
   import('@/views/goods/index')
 const Login = () =>
   import('@/views/login')
+const LoginCallback = () =>
+  import('@/views/login/callback')
 
 // 路由规则
 const routes = [
@@ -25,7 +27,8 @@ const routes = [
       { path: '/product/:id', component: Goods }
     ]
   },
-  { path: '/login', component: Login }
+  { path: '/login', component: Login },
+  { path: '/login/callback', component: LoginCallback }
 ]
 
 // vue2.0 new VueRouter({}) 创建路由实例
