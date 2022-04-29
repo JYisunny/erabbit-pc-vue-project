@@ -136,7 +136,7 @@ export default {
           oldPrice: sku.oldPrice,
           inventory: sku.inventory,
           // 属性名:属性值 属性名1:属性值1 ... 这样的字符串(方便购物车使用)
-          specsText: sku.specs.reduce((prev, cur) => `${prev} ${cur.name} ${cur.valueName}`, '').trim()
+          specsText: sku.specs.reduce((prev, cur) => `${prev} ${cur.name}: ${cur.valueName}`, '').trim()
         })
       } else {
         // 父组件需要判断是否规格完整，能否加入购物车

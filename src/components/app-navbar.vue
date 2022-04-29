@@ -40,7 +40,7 @@ export default {
     // 2. 跳转登录
     const router = useRouter()
     const logout = () => {
-      store.commit('user/setuser', {})
+      store.commit('user/setUser', {})
       router.push('/login')
     }
     return { profile, logout }
