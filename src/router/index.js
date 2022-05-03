@@ -14,6 +14,8 @@ const Login = () =>
   import('@/views/login')
 const LoginCallback = () =>
   import('@/views/login/callback')
+const Cart = () =>
+  import('@/views/cart')
 
 // 路由规则
 const routes = [
@@ -24,7 +26,8 @@ const routes = [
     children: [{ path: '/', component: Home },
       { path: '/category/:id', component: TopCategory },
       { path: '/category/sub/:id', component: SubCategory },
-      { path: '/product/:id', component: Goods }
+      { path: '/product/:id', component: Goods },
+      { path: '/cart', component: Cart }
     ]
   },
   { path: '/login', component: Login },

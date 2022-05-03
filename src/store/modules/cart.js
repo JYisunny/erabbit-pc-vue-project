@@ -22,7 +22,28 @@ export default {
     // 有效商品总金额
     validAmount (state, getters) {
       // return getters.validList.reduce((prev, curr) => prev + curr.nowPrice * 100 * curr.count, 0) / 100
-      return getters.validList.reduce((prev, curr) => prev + parseInt(curr.nowPrice * 100) * curr.count, 0) / 100
+      return getters.validList.reduce((prev, curr) => prev + Math.round(curr.nowPrice * 100) * curr.count, 0) / 100
+    },
+
+    // 无效商品列表
+    invalidList (state) {
+      return state.list.filter(goods => goods.stock <= 0 || !goods.isEffective)
+    },
+    // 已选商品列表
+    selectedList (state, getters) {
+      return getters.validList.filter(item => item.selected)
+    },
+    // 已选商品总件数
+    selectedTotal (state, getters) {
+      return getters.selectedList.reduce((prev, curr) => prev + curr.count, 0)
+    },
+    // 已选商品总金额
+    selectedAmount (state, getters) {
+      return getters.selectedList.reduce((prev, curr) => prev + Math.round(curr.nowPrice * 100) * curr.count, 0) / 100
+    },
+    // 是否全选
+    isCheckAll (state, getters) {
+      return getters.validList.length !== 0 && getters.selectedList.length === getters.validList.length
     }
   },
   mutations: {
@@ -47,7 +68,7 @@ export default {
     // 修改购物车商品
     updateCart (state, goods) {
       // goods 商品信息：nowPrice  stock   isEffective
-      // goods 商品对象的字段不固定，对象中有哪些字段就改该字段(如：selected，count=是否选中，数量)，字段值合理才改
+      // goods 商品对象的字段不固定，对象中有哪些字段就改该字段(如：selected，count==>是否选中，数量)，字段值合理才改
       // goods 商品对象 必须有 skuId
       const updateGoods = state.list.find(item => item.skuId === goods.skuId)
       for (const key in goods) {
@@ -113,6 +134,73 @@ export default {
         } else {
           // 未登录
           context.commit('deleteCart', payload)
+          resolve()
+        }
+      })
+    },
+
+    // 修改购物车 (选中状态，数量)
+    updateCart (context, payload) {
+      // payload 需要： skuId， 可能有： selected, count
+      return new Promise((resolve, reject) => {
+        if (context.rootState.user.profile.token) {
+          // TODO 已登录
+        } else {
+          // 未登录
+          context.commit('updateCart', payload)
+          resolve()
+        }
+      })
+    },
+
+    // 全选与取消全选
+    checkAllCart (context, selected) {
+      return new Promise((resolve, reject) => {
+        if (context.rootState.user.profile.token) {
+          // TODO 已登录
+        } else {
+          // 未登录
+          context.getters.validList.forEach(goods => {
+            context.commit('updateCart', { skuId: goods.skuId, selected })
+          })
+          resolve()
+        }
+      })
+    },
+
+    // 批量删除购物车
+    batchDeleteCart (ctx, isClear) {
+      return new Promise((resolve, reject) => {
+        if (ctx.rootState.user.profile.token) {
+          // TODO 已登录
+        } else {
+          // 未登录
+          // 找出选中的商品列表，遍历调用删除的 mutations方法
+          // ctx.getters.selectedList.forEach(item => {
+          // isClear 为true 删除失效商品列表    否则删除选中商品列表
+          ctx.getters[isClear ? 'invalidList' : 'selectedList'].forEach(item => {
+            ctx.commit('deleteCart', item.skuId)
+          })
+          resolve()
+        }
+      })
+    },
+
+    // 修改规格
+    updateCartSku (ctx, { oldSkuId, newSku }) {
+      return new Promise((resolve, reject) => {
+        if (ctx.rootState.user.profile.token) {
+          // TODO 已登录
+        } else {
+          // 未登录
+          // 1. 找出旧商品信息，并删除旧商品数据
+          // 2. 根据新的sku信息和旧商品信息，合并成一条新的购物车商品数据
+          // 3. 添加新的商品
+          const oldGoods = ctx.state.list.find(item => item.skuId === oldSkuId)
+          ctx.commit('deleteCart', oldSkuId)
+          const { skuId, price: nowPrice, specsText: attrsText, inventory: stock } = newSku
+          const newGoods = { ...oldGoods, skuId, nowPrice, attrsText, stock }
+          ctx.commit('insertCart', newGoods)
           resolve()
         }
       })
