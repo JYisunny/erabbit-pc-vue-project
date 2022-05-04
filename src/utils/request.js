@@ -40,7 +40,7 @@ instance.interceptors.response.use(res => res.data, err => {
     // 3. 跳转需要传参 (当前路由地址) 给登录页
     store.commit('user/setUser', {})
     // 当前路由地址
-    // 组件里头: `/user?a=10&b=20`  $route.path => /user         $toute.fullPath => /user?a=10
+    // 组件里头: `/user?a=10&b=20`  $route.path => /user         $route.fullPath => /user?a=10
     // js模块中: router.currentRoute.value.fullPath  就是当前路由地址,
     // router.currentRoute  是ref响应式数据(vue3.x) => (想拿数据必须加.value)
     const fullPath = encodeURIComponent(router.currentRoute.value.fullPath) // uri转码(%形式) 防止解析地址出问题
