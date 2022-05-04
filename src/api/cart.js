@@ -30,3 +30,51 @@ export const getGoodsSku = (skuId) => {
 export const mergeCart = (cartList) => {
   return request('/member/cart/merge', 'post', cartList)
 }
+
+/**
+ * 获取购物车列表
+ * @returns
+ */
+export const findCart = () => {
+  return request('/member/cart', 'get')
+}
+
+/**
+ * 加入购物车
+ * @param {String} object.skuId - SkuId
+ * @param {Integer} object.count - 加入购物车的数量
+ * @returns
+ */
+export const insertCart = ({ skuId, count }) => {
+  return request('/member/cart', 'post', { skuId, count })
+}
+
+/**
+ * 删除购物车商品，支持批量删除
+ * @param {Array<String>} ids - skuId 的集合
+ * @returns
+ */
+export const deleteCart = (ids) => {
+  return request('/member/cart', 'delete', { ids })
+}
+
+/**
+ * 修改购物车商品（状态，数量）
+ * @param {String} skuId - skuId
+ * @param {Integer} count - 加入购物车的数量
+ * @param {Boolean} selected - 选中状态
+ * @returns
+ */
+export const updateCart = ({ skuId, selected, count }) => {
+  return request(`/member/cart/${skuId}`, 'put', { skuId, selected, count })
+}
+
+/**
+ * 全部选中 & 取消全选
+ * @param {Boolean} selected - 选中状态
+ * @param {Array<String>} ids - skuId 的集合
+ * @returns
+ */
+export const checkAllCart = ({ selected, ids }) => {
+  return request('/member/cart/selected', 'put', { selected, ids })
+}
