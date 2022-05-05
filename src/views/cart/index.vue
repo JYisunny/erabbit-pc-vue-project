@@ -150,9 +150,13 @@ export default {
       // 2. 弹出确认框，提示：下单结算需要登录
       // 3. 使用导航守卫，遇见需要登录的路由跳转，拦截到登录页面
       if (store.getters['cart/selectedList'].length === 0) return Message({ text: '至少勾选一件商品' })
-      Confirm({ text: '下单结算需要登录，确认现在去登录吗？' }).then(() => {
+      if (!store.state.user.profile.token) {
+        Confirm({ text: '下单结算需要登录，确认现在去登录吗？' }).then(() => {
+          router.push('/member/checkout')
+        }).catch(e => {})
+      } else {
         router.push('/member/checkout')
-      }).catch(e => {})
+      }
     }
     return { checkOne, checkAll, deleteCart, batchDeleteCart, updateCount, updateCartSku, checkout }
   }
