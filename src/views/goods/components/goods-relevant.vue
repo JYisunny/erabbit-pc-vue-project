@@ -25,7 +25,7 @@ export default {
   },
   setup (props) {
     // 最终需要的数据是 sliders 提供给轮播图
-    // 数据结构： sliders = [[],[],[],[]]
+    // 数据结构： sliders = [[4个],[4个],[4个],[4个]]
     const sliders = ref([])
     findRelevantGoods({ id: props.goodsId }).then(data => {
       // data.result 商品列表，数据结构[16个商品]

@@ -25,6 +25,11 @@ const pay = () =>
 const payResult = () =>
   import('@/views/member/pay/result')
 
+const MemberLayout = () =>
+  import('@/views/member/Layout')
+const MemberHome = () =>
+  import('@/views/member/home')
+
 // 路由规则
 const routes = [
   // 一级路由布局容器
@@ -38,7 +43,14 @@ const routes = [
       { path: '/cart', component: Cart },
       { path: '/member/checkout', component: Checkout },
       { path: '/member/pay', component: pay },
-      { path: '/pay/callback', component: payResult }
+      { path: '/pay/callback', component: payResult },
+      {
+        path: '/member',
+        component: MemberLayout,
+        children: [
+          { path: '/member', component: MemberHome }
+        ]
+      }
     ]
   },
   { path: '/login', component: Login },
