@@ -58,6 +58,7 @@ export default {
       showAddress.value = defaultAddress
     } else {
       if (props.list.length) {
+        // (不加下面注释 gitcommit提交会报错)
         // eslint-disable-next-line vue/no-setup-props-destructure
         showAddress.value = props.list[0]
       }

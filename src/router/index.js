@@ -20,6 +20,8 @@ const Cart = () =>
 
 const Checkout = () =>
   import('@/views/member/pay/checkout')
+const pay = () =>
+  import('@/views/member/pay')
 
 // 路由规则
 const routes = [
@@ -32,7 +34,8 @@ const routes = [
       { path: '/category/sub/:id', component: SubCategory },
       { path: '/product/:id', component: Goods },
       { path: '/cart', component: Cart },
-      { path: '/member/checkout', component: Checkout }
+      { path: '/member/checkout', component: Checkout },
+      { path: '/member/pay', component: pay }
     ]
   },
   { path: '/login', component: Login },
