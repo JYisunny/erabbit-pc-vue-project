@@ -63,7 +63,7 @@ export default {
   }
   .wrapper {
     width: 600px;
-    height: 75%;
+    max-height: 90%;
     overflow-y: auto;
     background: #fff;
     border-radius: 4px;
