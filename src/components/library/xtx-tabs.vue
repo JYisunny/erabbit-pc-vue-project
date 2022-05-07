@@ -1,24 +1,91 @@
 <script>
+import { useVModel } from '@vueuse/core'
+import { provide } from 'vue'
 export default {
   name: 'XtxTabs',
-  render () {
-    // 返回的内容会进行渲染
-    // 1. 在babel 的帮助下，可以再vue 中写jsx语法
-    // 2. 数据的使用
-    const name = 'tom'
-    const title = 'tom 12'
-    // 3. 时间如何绑定
-    const say = () => {
-      console.log('Hi jsx')
+  props: {
+    modelValue: {
+      type: [String, Number],
+      default: ''
     }
-    // 4. 定义一个jsx对象
-    const sub = <sub>&nbsp; TomCat</sub>
-    const sup = [<sup>Jerry&nbsp;</sup>, <sup> &nbsp;JerryMouse</sup>]
-    return <h1 title={title} onClick={say} >{name}{sub}{sup}</h1>
+  },
+  setup (props, { emit }) {
+    // 接收 v-model的值
+    const activeName = useVModel(props, 'modelValue', emit)
+    // 点击选项卡触发函数
+    const tabClick = (name, index) => {
+      activeName.value = name
+      // 提供一个 tab-click自定义事件
+      emit('tab-click', { name, index })
+    }
+    // 给每一个 panel传当前激活的name
+    provide('activeName', activeName)
+
+    return { activeName, tabClick }
+  },
+  render () {
+    // 获取插槽内容
+    const panels = this.$slots.default()
+    // console.log(panels)
+    // 动态的panels 组件集合
+    const dynamicPanels = []
+    panels.forEach((item) => {
+      // 静态
+      if (item.type.name === 'XtxTabsPanel') {
+        dynamicPanels.push(item)
+      } else {
+        // v-for 动态渲染出来
+        item.children.forEach((item) => {
+          dynamicPanels.push(item)
+        })
+      }
+    })
+
+    // 需要在这里进行组织
+    // 1. tabs组件大容器
+    // 2. 选项卡的导航菜单结构
+    // 3. 内容容器
+    const nav = (
+      <nav>
+        {dynamicPanels.map((panel, i) => {
+          return (
+            <a
+              onClick={() => this.tabClick(panel.props.name, i)}
+              class={{ active: panel.props.name === this.activeName }}
+              href="javascript:;"
+            >
+              {panel.props.label}
+            </a>
+          )
+        })}
+      </nav>
+    )
+
+    return <div class="xtx-tabs">{[nav, dynamicPanels]}</div>
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+.xtx-tabs {
+  background: #fff;
+  > nav {
+    height: 60px;
+    line-height: 60px;
+    display: flex;
+    border-bottom: 1px solid #f5f5f5;
+    > a {
+      width: 110px;
+      border-right: 1px solid #f5f5f5;
+      text-align: center;
+      font-size: 16px;
+      &.active {
+        border-top: 2px solid @xtxColor;
+        height: 60px;
+        background: #fff;
+        line-height: 56px;
+      }
+    }
+  }
+}
 </style>
