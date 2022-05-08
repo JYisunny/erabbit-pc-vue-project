@@ -44,7 +44,7 @@ export const usePayTime = () => {
   const { pause, resume } = useIntervalFn(() => {
     time.value--
     timeText.value = dayjs.unix(time.value).format('mm分ss秒')
-    console.log(time.value)
+    // console.log(time.value)
     if (time.value <= 0) {
       pause()
     }

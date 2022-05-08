@@ -3,20 +3,26 @@
     <!-- 轮播图片容器 -->
     <ul class="carousel-body">
       <!-- fade 显示图片加上即可 -->
-      <li class="carousel-item" :class="{ fade: index === i }" v-for="(item, i) in sliders" :key="i">
+      <li
+        class="carousel-item"
+        :class="{ fade: index === i }"
+        v-for="(item, i) in sliders"
+        :key="i"
+      >
         <!-- 图片 -->
         <RouterLink v-if="item.imgUrl" to="/">
-          <img
-            :src="item.imgUrl"
-            alt=""
-          />
+          <img :src="item.imgUrl" alt="" />
         </RouterLink>
         <!-- 商品列表 item=[goods1,goods2, ...] -->
         <div v-else class="slider">
-          <RouterLink v-for="goods in item" :key="goods.id" :to="`/product/${goods.id}`">
-            <img :src="goods.picture" alt="">
-            <p class="name ellipsis">{{goods.name}}</p>
-            <p class="price">&yen;{{goods.price}}</p>
+          <RouterLink
+            v-for="goods in item"
+            :key="goods.id"
+            :to="`/product/${goods.id}`"
+          >
+            <img :src="goods.picture" alt="" />
+            <p class="name ellipsis">{{ goods.name }}</p>
+            <p class="price">&yen;{{ goods.price }}</p>
           </RouterLink>
         </div>
       </li>
@@ -31,8 +37,13 @@
     ></a>
     <!-- 指示器(原点) -->
     <div class="carousel-indicator">
-        <!-- active 激活指示器 -->
-      <span @click="index = i" :class="{ active: index === i }" v-for="(item, i) in sliders" :key="i"></span>
+      <!-- active 激活指示器 -->
+      <span
+        @click="index = i"
+        :class="{ active: index === i }"
+        v-for="(item, i) in sliders"
+        :key="i"
+      ></span>
     </div>
   </div>
 </template>
@@ -76,11 +87,15 @@ export default {
       }, props.duration)
     }
     // 需要监听 sliders数据变化, 判断 如果有数据且 autoPlay是 true
-    watch(() => props.sliders, (newVal) => {
-      if (newVal.length && props.autoPlay) {
-        autoPlayFn()
-      }
-    }, { immediate: true })
+    watch(
+      () => props.sliders,
+      (newVal) => {
+        if (newVal.length && props.autoPlay) {
+          autoPlayFn()
+        }
+      },
+      { immediate: true }
+    )
 
     // 2. 鼠标进入暂停 离开开启自动播放 (有开启条件)
     const stop = () => {
@@ -98,7 +113,7 @@ export default {
       // 将要改变的索引
       const newIndex = index.value + step
       // 超出的情况(点击最后一张图片情况)
-      if (newIndex > (props.sliders.length)) {
+      if (newIndex > props.sliders.length - 1) {
         index.value = 0
         return
       }
@@ -208,8 +223,8 @@ export default {
       text-align: center;
       img {
         padding: 20px;
-        width: 230px!important;
-        height: 230px!important;
+        width: 230px !important;
+        height: 230px !important;
       }
       .name {
         font-size: 16px;
