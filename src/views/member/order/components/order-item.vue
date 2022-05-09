@@ -42,7 +42,9 @@
           <a class="green" href="javascript:;">查看物流</a>
         </p>
         <p v-if="order.orderState === 4">
-          <RouterLink class="green" :to="`/product/${order.skus[0].spuId}`">查看商品</RouterLink>
+          <RouterLink class="green" :to="`/product/${order.skus[0].spuId}`"
+            >查看商品</RouterLink
+          >
         </p>
         <p v-if="order.orderState === 5">
           <a class="green" href="javascript:;">查看评价</a>
@@ -59,7 +61,7 @@
         <!-- 待收货：确认收货，查看详情，再次购买 -->
         <!-- 待评价：查看详情，再次购买，申请售后 -->
         <!-- 已完成：查看详情，再次购买，申请售后 -->
-        <!-- 已取消：查看详情 -->
+        <!-- 已取消：查看详情，再次购买 -->
         <XtxButton
           @click="$router.push(`/member/pay?orderId=${order.id}`)"
           v-if="order.orderState === 1"
@@ -84,7 +86,10 @@
         <p @click="$emit('on-cancel', order)" v-if="order.orderState === 1">
           <a href="javascript:;">取消订单</a>
         </p>
-        <p v-if="[2, 3, 4, 5].includes(order.orderState)">
+        <p
+          @click="$router.push(`/member/checkout?orderId=${order.id}`)"
+          v-if="[2, 3, 4, 5, 6].includes(order.orderState)"
+        >
           <a href="javascript:;">再次购买</a>
         </p>
         <p v-if="[4, 5].includes(order.orderState)">

@@ -117,7 +117,7 @@ export default {
   }
 }
 // 取消订单逻辑
-const useCancel = () => {
+export const useCancel = () => {
   // 组件实例
   const orderCancelCom = ref(null)
   // 点击打开 订单取消对话框
@@ -129,7 +129,7 @@ const useCancel = () => {
 }
 
 // 确认收货逻辑
-const useConfirm = () => {
+export const useConfirm = () => {
   const handlerConfirm = (order) => {
     Confirm({ text: '您确认收货吗？确认后货款将打给卖家' })
       .then(() => {
@@ -145,7 +145,7 @@ const useConfirm = () => {
 }
 
 // 查看物流逻辑
-const useLogistics = () => {
+export const useLogistics = () => {
   const orderLogisticsCom = ref(null)
   const handlerLogistics = (order) => {
     orderLogisticsCom.value.open(order)

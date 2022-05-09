@@ -5,7 +5,19 @@
     <!-- 进度 -->
     <DetailStep :order="order" />
     <!-- 物流 -->
+
+    <Suspense>
+      <template #default
+        ><DetailLogistics
+          v-if="[3, 4, 5].includes(order.orderState)"
+          :order="order"
+      /></template>
+      <template #fallback>
+        <div class="loading">Loading</div>
+      </template>
+    </Suspense>
     <!-- 信息 -->
+    <DetailInfo :order="order" />
   </div>
 </template>
 
@@ -13,11 +25,13 @@
 import { ref } from 'vue'
 import OrderDetailAction from './components/detail-action'
 import DetailStep from './components/detail-step'
+import DetailLogistics from './components/detail-logistics'
+import DetailInfo from './components/detail-info'
 import { findOrderDetail } from '@/api/order'
 import { useRoute } from 'vue-router'
 export default {
   name: 'MemberDetail',
-  components: { OrderDetailAction, DetailStep },
+  components: { OrderDetailAction, DetailStep, DetailLogistics, DetailInfo },
   setup () {
     const route = useRoute()
     const order = ref(null)
@@ -33,5 +47,13 @@ export default {
 .member-order-detail {
   background: #fff;
   height: 100%;
+}
+.loading {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  background-color: #f5f5f5;
+  margin: 30px 50px 0;
 }
 </style>
